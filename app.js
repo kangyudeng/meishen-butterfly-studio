@@ -7,8 +7,8 @@ const specimens = [
     titleText: "玫瑰彩袄蛱蝶杂交水波靴蛱蝶",
     latinHtml: "<i>Agrias claudina lugens</i> × <i>Prepona dexamenus</i>",
     images: {
-      dorsal: "assets/agrias-dorsal.png",
-      ventral: "assets/agrias-ventral.png",
+      dorsal: "assets/agrias-dorsal.webp",
+      ventral: "assets/agrias-ventral.webp",
     },
     highRes: {
       dorsal: { key: "agrias-dorsal", parts: 3 },
@@ -36,8 +36,8 @@ const specimens = [
     titleText: "安绿番凤蝶",
     latinHtml: "<i>Parides anchises nephalion</i>",
     images: {
-      dorsal: "assets/parides-dorsal.png",
-      ventral: "assets/parides-ventral.png",
+      dorsal: "assets/parides-dorsal.webp",
+      ventral: "assets/parides-ventral.webp",
     },
     highRes: {
       dorsal: { key: "parides-dorsal", parts: 3 },
@@ -166,8 +166,6 @@ function renderSpecimen(index) {
     images.ventral.src = specimen.images.ventral;
     images.dorsal.alt = specimen.alts.dorsal;
     images.ventral.alt = specimen.alts.ventral;
-    upgradeImage("dorsal", specimen);
-    upgradeImage("ventral", specimen);
 
     document.documentElement.style.setProperty("--acid", specimen.accents[0]);
     document.documentElement.style.setProperty("--coral", specimen.accents[1]);
@@ -210,6 +208,3 @@ stage.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") setView("dorsal");
   if (event.key === "ArrowRight") setView("ventral");
 });
-
-upgradeImage("dorsal", specimens[0]);
-upgradeImage("ventral", specimens[0]);
