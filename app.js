@@ -10,6 +10,10 @@ const specimens = [
       dorsal: "assets/agrias-dorsal.png",
       ventral: "assets/agrias-ventral.png",
     },
+    highRes: {
+      dorsal: { key: "agrias-dorsal", parts: 3 },
+      ventral: { key: "agrias-ventral", parts: 5 },
+    },
     alts: {
       dorsal: "玫瑰彩袄蛱蝶杂交水波靴蛱蝶的翅正面：黑色翅面带橙红、玫红与电光蓝色斑纹",
       ventral: "玫瑰彩袄蛱蝶杂交水波靴蛱蝶的翅背面：金褐与橙黄色翅面带有成列眼斑",
@@ -35,6 +39,10 @@ const specimens = [
       dorsal: "assets/parides-dorsal.png",
       ventral: "assets/parides-ventral.png",
     },
+    highRes: {
+      dorsal: { key: "parides-dorsal", parts: 3 },
+      ventral: { key: "parides-ventral", parts: 3 },
+    },
     alts: {
       dorsal: "安绿番凤蝶的翅正面：墨黑翅面带薄荷绿色、乳白色与朱红色斑纹",
       ventral: "安绿番凤蝶的翅背面：橄榄黑色翅面带清晰翅脉与红橙色后翅斑点",
@@ -52,6 +60,7 @@ const specimens = [
 ];
 
 const state = { view: "dorsal", specimen: 0 };
+const highResCache = new Map();
 
 const page = document.querySelector(".specimen-page");
 const stage = document.querySelector("#butterfly-stage");
@@ -76,6 +85,43 @@ const fields = {
   price: document.querySelector("#price-range"),
   priceNote: document.querySelector("#price-note"),
 };
+
+function getHighResUrl(asset) {
+  if (highResCache.has(asset.key)) return highResCache.get(asset.key);
+
+  const request = Promise.all(
+    Array.from({ length: asset.parts }, (_, index) =>
+      fetch(`assets/full/${asset.key}.${index}.b64`).then((response) => {
+        if (!response.ok) throw new Error(`Unable to load ${asset.key}`);
+        return response.text();
+      }),
+    ),
+  ).then((chunks) => {
+    const binary = window.atob(chunks.join(""));
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) {
+      bytes[index] = binary.charCodeAt(index);
+    }
+    return URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
+  });
+
+  highResCache.set(asset.key, request);
+  return request;
+}
+
+function upgradeImage(side, specimen) {
+  const image = images[side];
+  const asset = specimen.highRes[side];
+  image.dataset.highResKey = asset.key;
+
+  getHighResUrl(asset)
+    .then((url) => {
+      if (image.dataset.highResKey === asset.key) image.src = url;
+    })
+    .catch(() => {
+      // Keep the lightweight fallback image if the original is unavailable.
+    });
+}
 
 function setView(nextView) {
   if (!images[nextView]) return;
@@ -120,6 +166,8 @@ function renderSpecimen(index) {
     images.ventral.src = specimen.images.ventral;
     images.dorsal.alt = specimen.alts.dorsal;
     images.ventral.alt = specimen.alts.ventral;
+    upgradeImage("dorsal", specimen);
+    upgradeImage("ventral", specimen);
 
     document.documentElement.style.setProperty("--acid", specimen.accents[0]);
     document.documentElement.style.setProperty("--coral", specimen.accents[1]);
@@ -162,3 +210,6 @@ stage.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") setView("dorsal");
   if (event.key === "ArrowRight") setView("ventral");
 });
+
+upgradeImage("dorsal", specimens[0]);
+upgradeImage("ventral", specimens[0]);
