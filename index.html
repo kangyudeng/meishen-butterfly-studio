@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#071411" />
+    <meta
+      name="description"
+      content="玫瑰彩袄蛱蝶杂交水波靴蛱蝶标本档案：正反面观察、形态描述与收藏参考。"
+    />
+    <title>美神蝴蝶标本工作室 · 玫瑰彩袄蛱蝶杂交水波靴蛱蝶</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071411'/%3E%3Cpath d='M31 31C23 10 7 12 8 28c1 12 14 15 23 7v17h2V35c9 8 22 5 23-7 1-16-15-18-23 3h-2Z' fill='%23f15b3a'/%3E%3Ccircle cx='32' cy='31' r='3' fill='%23d8f46a'/%3E%3C/svg%3E"
+    />
+    <link rel="preload" as="image" href="assets/agrias-dorsal.png" />
+    <link rel="preload" as="image" href="assets/parides-dorsal.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="美神蝴蝶标本工作室首页">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>美神蝴蝶标本工作室</span>
+        <span class="brand-en">LEPIDOPTERA ARCHIVE</span>
+      </a>
+      <div class="specimen-index"><span>SPECIMEN</span><strong id="header-index">001</strong></div>
+    </header>
+
+    <main id="top" class="specimen-page">
+      <section class="viewer" aria-labelledby="specimen-title">
+        <div class="viewer-caption">
+          <span id="specimen-type" class="eyebrow">HYBRID SPECIMEN</span>
+          <span id="side-label" class="side-label">翅正面 · DORSAL</span>
+        </div>
+
+        <button
+          id="butterfly-stage"
+          class="butterfly-stage"
+          type="button"
+          aria-label="切换到翅背面"
+          aria-live="polite"
+        >
+          <span class="specimen-glow" aria-hidden="true"></span>
+          <img
+            id="dorsal-image"
+            class="butterfly-image is-active"
+            src="assets/agrias-dorsal.png"
+            alt="玫瑰彩袄蛱蝶杂交水波靴蛱蝶的翅正面：黑色翅面带橙红、玫红与电光蓝色斑纹"
+          />
+          <img
+            id="ventral-image"
+            class="butterfly-image"
+            src="assets/agrias-ventral.png"
+            alt="玫瑰彩袄蛱蝶杂交水波靴蛱蝶的翅背面：金褐与橙黄色翅面带有成列眼斑"
+          />
+        </button>
+
+        <div class="view-controls glass" role="group" aria-label="标本正反面选择">
+          <button class="view-button is-selected" type="button" data-view="dorsal" aria-pressed="true">
+            <span class="view-dot"></span>翅正面
+          </button>
+          <button class="view-button" type="button" data-view="ventral" aria-pressed="false">
+            <span class="view-dot"></span>翅背面
+          </button>
+        </div>
+        <p class="interaction-hint">点击标本或按钮，观察另一面</p>
+      </section>
+
+      <aside class="specimen-card glass" aria-label="标本档案">
+        <div class="card-topline">
+          <span id="collection-index">COLLECTION / 001</span>
+          <span class="status"><i></i>藏品档案</span>
+        </div>
+
+        <div class="title-group">
+          <p id="specimen-kicker" class="kicker">美丽彩袄蛱蝶杂交体</p>
+          <h1 id="specimen-title">玫瑰彩袄蛱蝶<br />杂交水波靴蛱蝶</h1>
+          <p id="latin-name" class="latin-name"><i>Agrias claudina lugens</i> × <i>Prepona dexamenus</i></p>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <section class="description" aria-labelledby="appearance-title">
+          <h2 id="appearance-title">形态观察</h2>
+          <p id="appearance-one">
+            翅正面以深绒黑为底，前翅铺展开炽烈的橙红与玫红色块，近基部嵌着一道电光蓝；后翅的宝石蓝斑与奶黄色斑点在暗色翅面上形成鲜明对比。
+          </p>
+          <p id="appearance-two">
+            翅背面则转为金褐、橙黄与奶油白，后翅排列着层次丰富的环状眼斑。正反两面一面浓烈、一面繁复，呈现出两种亲本风格交汇后的独特观赏性。
+          </p>
+        </section>
+
+        <section class="collecting-note" aria-labelledby="collection-title">
+          <div class="note-heading">
+            <h2 id="collection-title">收藏参考</h2>
+            <span>MARKET NOTE</span>
+          </div>
+          <p id="collection-copy">
+            在美丽彩袄蛱蝶杂交体中，这一组合兼具醒目的翅正面色彩与细节丰富的翅背面纹理，是一只收藏表现突出、性价比较高的标本。
+          </p>
+          <div class="price-row">
+            <span>品相良好参考区间</span>
+            <strong id="price-range"><small>¥</small>350–400</strong>
+          </div>
+          <p id="price-note" class="price-note">绿色形态通常价格更高；实际价值会因完整度、尺寸、展翅状态与市场供求而变化。</p>
+        </section>
+      </aside>
+    </main>
+
+    <nav class="collection-switcher glass" aria-label="馆藏标本选择">
+      <div class="collection-label">
+        <span>馆藏目录</span>
+        <small>02 件标本</small>
+      </div>
+      <div class="collection-items">
+        <button class="specimen-button is-current" type="button" data-specimen="0" aria-current="true">
+          <small>001</small>
+          <span>玫瑰彩袄蛱蝶杂交<br />水波靴蛱蝶</span>
+        </button>
+        <button class="specimen-button" type="button" data-specimen="1">
+          <small>002</small>
+          <span>安绿番凤蝶</span>
+        </button>
+      </div>
+    </nav>
+
+    <footer>
+      <span>PRIVATE SPECIMEN COLLECTION</span>
+      <span>正反面影像档案 · 2026</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
