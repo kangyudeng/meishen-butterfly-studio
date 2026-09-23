@@ -10,6 +10,10 @@ const specimens = [
       dorsal: "assets/agrias-dorsal.webp",
       ventral: "assets/agrias-ventral.webp",
     },
+    previews: {
+      dorsal: "assets/agrias-dorsal-preview.webp",
+      ventral: "assets/agrias-ventral-preview.webp",
+    },
     highRes: {
       dorsal: { key: "agrias-dorsal", parts: 3 },
       ventral: { key: "agrias-ventral", parts: 5 },
@@ -38,6 +42,10 @@ const specimens = [
     images: {
       dorsal: "assets/parides-dorsal.webp",
       ventral: "assets/parides-ventral.webp",
+    },
+    previews: {
+      dorsal: "assets/parides-dorsal-preview.webp",
+      ventral: "assets/parides-ventral-preview.webp",
     },
     highRes: {
       dorsal: { key: "parides-dorsal", parts: 3 },
@@ -86,37 +94,35 @@ const fields = {
   priceNote: document.querySelector("#price-note"),
 };
 
-function getHighResUrl(asset) {
-  if (highResCache.has(asset.key)) return highResCache.get(asset.key);
+function getHighResUrl(source) {
+  if (highResCache.has(source)) return highResCache.get(source);
 
-  const request = Promise.all(
-    Array.from({ length: asset.parts }, (_, index) =>
-      fetch(`assets/full/${asset.key}.${index}.b64`).then((response) => {
-        if (!response.ok) throw new Error(`Unable to load ${asset.key}`);
-        return response.text();
-      }),
-    ),
-  ).then((chunks) => {
-    const binary = window.atob(chunks.join(""));
-    const bytes = new Uint8Array(binary.length);
-    for (let index = 0; index < binary.length; index += 1) {
-      bytes[index] = binary.charCodeAt(index);
-    }
-    return URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
+  const request = new Promise((resolve, reject) => {
+    const loader = new Image();
+    loader.decoding = "async";
+    loader.onload = () => resolve(source);
+    loader.onerror = () => {
+      const fallback = source.replace(/\.webp$/, ".png");
+      const fallbackLoader = new Image();
+      fallbackLoader.onload = () => resolve(fallback);
+      fallbackLoader.onerror = reject;
+      fallbackLoader.src = fallback;
+    };
+    loader.src = source;
   });
 
-  highResCache.set(asset.key, request);
+  highResCache.set(source, request);
   return request;
 }
 
 function upgradeImage(side, specimen) {
   const image = images[side];
-  const asset = specimen.highRes[side];
-  image.dataset.highResKey = asset.key;
+  const source = specimen.images[side];
+  image.dataset.highResKey = source;
 
-  getHighResUrl(asset)
+  getHighResUrl(source)
     .then((url) => {
-      if (image.dataset.highResKey === asset.key) image.src = url;
+      if (image.dataset.highResKey === source) image.src = url;
     })
     .catch(() => {
       // Keep the lightweight fallback image if the original is unavailable.
@@ -125,6 +131,8 @@ function upgradeImage(side, specimen) {
 
 function setView(nextView) {
   if (!images[nextView]) return;
+
+  upgradeImage(nextView, specimens[state.specimen]);
 
   state.view = nextView;
   Object.entries(images).forEach(([view, image]) => {
@@ -162,8 +170,8 @@ function renderSpecimen(index) {
     fields.price.innerHTML = `<small>¥</small>${specimen.price}`;
     fields.priceNote.textContent = specimen.priceNote;
 
-    images.dorsal.src = specimen.images.dorsal;
-    images.ventral.src = specimen.images.ventral;
+    images.dorsal.src = specimen.previews.dorsal;
+    images.ventral.src = specimen.previews.ventral;
     images.dorsal.alt = specimen.alts.dorsal;
     images.ventral.alt = specimen.alts.ventral;
 
@@ -182,6 +190,10 @@ function renderSpecimen(index) {
 
     setView("dorsal");
     page.classList.remove("is-changing");
+
+    window.setTimeout(() => {
+      if (state.specimen === index) upgradeImage("ventral", specimen);
+    }, 900);
   }, 140);
 }
 
@@ -211,6 +223,19 @@ stage.addEventListener("keydown", (event) => {
 
 Object.values(images).forEach((image) => {
   image.addEventListener("error", () => {
-    if (image.src.endsWith(".webp")) image.src = image.src.replace(/\.webp$/, ".png");
+    if (image.src.endsWith("-preview.webp")) {
+      image.src = image.src.replace(/-preview\.webp$/, ".png");
+    } else if (image.src.endsWith(".webp")) {
+      image.src = image.src.replace(/\.webp$/, ".png");
+    }
   });
 });
+
+window.addEventListener(
+  "load",
+  () => {
+    window.setTimeout(() => upgradeImage("dorsal", specimens[0]), 100);
+    window.setTimeout(() => upgradeImage("ventral", specimens[0]), 900);
+  },
+  { once: true },
+);
