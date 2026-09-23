@@ -61,6 +61,8 @@ const specimens = [
 
 const state = { view: "dorsal", specimen: 0 };
 const highResCache = new Map();
+const transparentPixel =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
 const page = document.querySelector(".specimen-page");
 const stage = document.querySelector("#butterfly-stage");
@@ -123,8 +125,16 @@ function upgradeImage(side, specimen) {
     });
 }
 
+function loadDeferredImage(image) {
+  if (!image.dataset.src) return;
+  image.src = image.dataset.src;
+  image.removeAttribute("data-src");
+}
+
 function setView(nextView) {
   if (!images[nextView]) return;
+
+  loadDeferredImage(images[nextView]);
 
   state.view = nextView;
   Object.entries(images).forEach(([view, image]) => {
@@ -163,7 +173,9 @@ function renderSpecimen(index) {
     fields.priceNote.textContent = specimen.priceNote;
 
     images.dorsal.src = specimen.images.dorsal;
-    images.ventral.src = specimen.images.ventral;
+    images.dorsal.removeAttribute("data-src");
+    images.ventral.src = transparentPixel;
+    images.ventral.dataset.src = specimen.images.ventral;
     images.dorsal.alt = specimen.alts.dorsal;
     images.ventral.alt = specimen.alts.ventral;
 
@@ -182,6 +194,10 @@ function renderSpecimen(index) {
 
     setView("dorsal");
     page.classList.remove("is-changing");
+
+    window.setTimeout(() => {
+      if (state.specimen === index) loadDeferredImage(images.ventral);
+    }, 1400);
   }, 140);
 }
 
@@ -208,3 +224,9 @@ stage.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") setView("dorsal");
   if (event.key === "ArrowRight") setView("ventral");
 });
+
+window.addEventListener(
+  "load",
+  () => window.setTimeout(() => loadDeferredImage(images.ventral), 1400),
+  { once: true },
+);
