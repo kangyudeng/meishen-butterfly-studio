@@ -67,7 +67,7 @@ const specimens = [
   },
 ];
 
-const state = { view: "dorsal", specimen: 0 };
+const state = { view: "dorsal", specimen: 0, renderToken: 0 };
 const highResCache = new Map();
 
 const page = document.querySelector(".specimen-page");
@@ -154,10 +154,16 @@ function renderSpecimen(index) {
   const specimen = specimens[index];
   if (!specimen) return;
 
+  const renderToken = state.renderToken + 1;
+  state.renderToken = renderToken;
   state.specimen = index;
+  images.dorsal.dataset.highResKey = specimen.images.dorsal;
+  images.ventral.dataset.highResKey = specimen.images.ventral;
   page.classList.add("is-changing");
 
   window.setTimeout(() => {
+    if (state.renderToken !== renderToken || state.specimen !== index) return;
+
     fields.headerIndex.textContent = specimen.index;
     fields.collectionIndex.textContent = `COLLECTION / ${specimen.index}`;
     fields.type.textContent = specimen.type;
@@ -192,7 +198,9 @@ function renderSpecimen(index) {
     page.classList.remove("is-changing");
 
     window.setTimeout(() => {
-      if (state.specimen === index) upgradeImage("ventral", specimen);
+      if (state.renderToken === renderToken && state.specimen === index) {
+        upgradeImage("ventral", specimen);
+      }
     }, 900);
   }, 140);
 }
@@ -234,8 +242,12 @@ Object.values(images).forEach((image) => {
 window.addEventListener(
   "load",
   () => {
-    window.setTimeout(() => upgradeImage("dorsal", specimens[0]), 100);
-    window.setTimeout(() => upgradeImage("ventral", specimens[0]), 900);
+    window.setTimeout(() => {
+      if (state.specimen === 0) upgradeImage("dorsal", specimens[0]);
+    }, 100);
+    window.setTimeout(() => {
+      if (state.specimen === 0) upgradeImage("ventral", specimens[0]);
+    }, 900);
   },
   { once: true },
 );
