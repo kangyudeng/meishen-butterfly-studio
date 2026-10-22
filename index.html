@@ -18,7 +18,9 @@
     <link rel="preload" as="image" href="assets/agrias-ventral-preview.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/parides-dorsal-preview.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/parides-ventral-preview.webp" type="image/webp" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" as="image" href="assets/specimen-003-dorsal-preview.webp" type="image/webp" />
+    <link rel="preload" as="image" href="assets/specimen-003-ventral-preview.webp" type="image/webp" />
+    <link rel="stylesheet" href="styles.css?v=8" />
   </head>
   <body>
     <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -77,7 +79,7 @@
       <aside class="specimen-card glass" aria-label="标本档案">
         <div class="card-topline">
           <span id="collection-index">COLLECTION / 001</span>
-          <span class="status"><i></i>藏品档案</span>
+          <span class="status"><i></i>昕语爸爸藏品档案</span>
         </div>
 
         <div class="title-group">
@@ -118,7 +120,7 @@
     <nav class="collection-switcher glass" aria-label="馆藏标本选择">
       <div class="collection-label">
         <span>馆藏目录</span>
-        <small>02 件标本</small>
+        <small>03 件标本</small>
       </div>
       <div class="collection-items">
         <button class="specimen-button is-current" type="button" data-specimen="0" aria-current="true">
@@ -129,6 +131,10 @@
           <small>002</small>
           <span>安绿番凤蝶</span>
         </button>
+        <button class="specimen-button" type="button" data-specimen="2">
+          <small>003</small>
+          <span>美丽彩袄杂交<br />水波靴蛱蝶</span>
+        </button>
       </div>
     </nav>
 
@@ -137,6 +143,6 @@
       <span>正反面影像档案 · 2026</span>
     </footer>
 
-    <script src="app.js?v=7"></script>
+    <script src="app.js?v=8"></script>
   </body>
 </html>

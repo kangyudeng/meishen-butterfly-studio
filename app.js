@@ -65,6 +65,35 @@ const specimens = [
     priceNote: "参考区间适用于品相完整、展翅自然的个体；实际价格会随尺寸、完整度与市场供求变化。",
     accents: ["#bdebb6", "#ff5038"],
   },
+  {
+    index: "003",
+    type: "HYBRID SPECIMEN",
+    kicker: "美丽彩袄蛱蝶杂交体",
+    titleHtml: "美丽彩袄杂交<br />水波靴蛱蝶",
+    titleText: "美丽彩袄杂交水波靴蛱蝶",
+    latinHtml: "<i>Agrias beata</i> × <i>Prepona laertes</i>",
+    images: {
+      dorsal: "assets/specimen-003-dorsal.webp",
+      ventral: "assets/specimen-003-ventral.webp",
+    },
+    previews: {
+      dorsal: "assets/specimen-003-dorsal-preview.webp",
+      ventral: "assets/specimen-003-ventral-preview.webp",
+    },
+    alts: {
+      dorsal: "美丽彩袄杂交水波靴蛱蝶的翅正面：深褐色翅面上呈现醒目的宝蓝色带与蓝色后翅斑",
+      ventral: "美丽彩袄杂交水波靴蛱蝶的翅背面：灰褐色前翅与橙黄色后翅，外缘排列深色眼斑",
+    },
+    appearance: [
+      "翅正面以深褐近黑的底色衬托浓郁的宝蓝光泽。两侧前翅各展开一条宽阔蓝带，后翅则铺着扇状蓝斑，细密翅脉从中穿过；身体两侧的一抹金黄，为冷色翅面添上一点暖意。",
+      "翅背面呈现截然不同的暖色层次：前翅由灰褐渐入深棕，翅端带有曲折的深色纹路；后翅中央为橙黄与金褐色，外缘过渡为灰白色带，其间排列着一圈大小不一的深色眼斑，纹理丰富而耐看。",
+    ],
+    collection:
+      "这件杂交标本兼具宝蓝色翅正面与眼斑丰富的翅背面，适合欣赏正背面色彩反差与翅纹细节。以工作室提供的参考价格来看，也为偏爱蓝色系标本的收藏者提供了一个预算相对亲切的选择。",
+    price: "200–280",
+    priceNote: "参考价格由工作室提供；实际价格以具体个体的完整度、尺寸、展翅状态与成交确认为准。",
+    accents: ["#a8c8ff", "#e9ab50"],
+  },
 ];
 
 const state = { view: "dorsal", specimen: 0, renderToken: 0 };

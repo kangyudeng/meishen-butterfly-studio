@@ -321,6 +321,8 @@ footer {
 
 .card-topline {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
   justify-content: space-between;
   color: var(--muted);
 }
@@ -487,6 +489,7 @@ h1 {
 .collection-items {
   display: flex;
   flex: 1;
+  overflow-x: auto;
   gap: 0.35rem;
   min-width: 0;
   padding-left: 0.45rem;
