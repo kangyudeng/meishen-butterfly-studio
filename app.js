@@ -27,9 +27,7 @@ const specimens = [
       "翅背面则转为金褐、橙黄与奶油白，后翅排列着层次丰富的环状眼斑。正反两面一面浓烈、一面繁复，呈现出两种亲本风格交汇后的独特观赏性。",
     ],
     collection:
-      "在美丽彩袄蛱蝶杂交体中，这一组合兼具醒目的翅正面色彩与细节丰富的翅背面纹理，是一只收藏表现突出、性价比较高的标本。",
-    price: "350–400",
-    priceNote: "绿色形态通常价格更高；实际价值会因完整度、尺寸、展翅状态与市场供求而变化。",
+      "这一组合兼具醒目的翅正面色彩与细节丰富的翅背面纹理，适合对照欣赏正背面的色彩与斑纹。",
     accents: ["#d9f478", "#ff6544"],
   },
   {
@@ -60,9 +58,7 @@ const specimens = [
       "翅背面收敛为低调的橄榄黑与深褐色，光线下可见细密而清晰的翅脉。后翅只留下少量红橙色斑点，配合身体两侧的红色点缀，呈现出比正面更沉稳、克制的层次。",
     ],
     collection:
-      "安绿番凤蝶以少量高纯度色斑打破大面积深色翅面，辨识度高而不显繁复。正背面对比清楚、展翅轮廓漂亮，是兼顾观赏效果与入门预算的一件标本。",
-    price: "80–120",
-    priceNote: "参考区间适用于品相完整、展翅自然的个体；实际价格会随尺寸、完整度与市场供求变化。",
+      "安绿番凤蝶以少量高纯度色斑打破大面积深色翅面，辨识度高而不显繁复。正背面对比清楚，展翅轮廓利落，适合观察色斑与翅缘的细节。",
     accents: ["#bdebb6", "#ff5038"],
   },
   {
@@ -89,12 +85,39 @@ const specimens = [
       "翅背面呈现截然不同的暖色层次：前翅由灰褐渐入深棕，翅端带有曲折的深色纹路；后翅中央为橙黄与金褐色，外缘过渡为灰白色带，其间排列着一圈大小不一的深色眼斑，纹理丰富而耐看。",
     ],
     collection:
-      "这件杂交标本兼具宝蓝色翅正面与眼斑丰富的翅背面，适合欣赏正背面色彩反差与翅纹细节。以工作室提供的参考价格来看，也为偏爱蓝色系标本的收藏者提供了一个预算相对亲切的选择。",
-    price: "200–280",
-    priceNote: "参考价格由工作室提供；实际价格以具体个体的完整度、尺寸、展翅状态与成交确认为准。",
+      "这件杂交标本兼具宝蓝色翅正面与眼斑丰富的翅背面，适合欣赏正背面色彩反差与翅纹细节。深色翅缘衬托着大面积蓝斑，形成鲜明的视觉层次。",
     accents: ["#a8c8ff", "#e9ab50"],
   },
 ];
+
+// Treat spelling/spacing variants of the same full name as one catalogue entry.
+const normalizeName = (value) => value.replace(/<[^>]*>/g, "").normalize("NFKC")
+  .toLocaleLowerCase().replace(/\s+/g, "").replace(/f\./g, "f");
+const knownNames = new Set(specimens.flatMap((specimen) => [
+  normalizeName(specimen.titleText), normalizeName(specimen.latinHtml),
+]));
+for (const specimen of window.additionalSpecimens || []) {
+  const names = [normalizeName(specimen.titleText), normalizeName(specimen.latinHtml)];
+  if (names.some((name) => knownNames.has(name))) continue;
+  names.forEach((name) => knownNames.add(name));
+  specimens.push(specimen);
+}
+
+const directory = document.querySelector(".collection-items");
+directory.replaceChildren(...specimens.map((specimen, index) => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "specimen-button" + (index === 0 ? " is-current" : "");
+  button.dataset.specimen = String(index);
+  const number = document.createElement("small");
+  number.textContent = specimen.index;
+  const name = document.createElement("span");
+  name.textContent = specimen.titleText;
+  button.append(number, name);
+  if (index === 0) button.setAttribute("aria-current", "true");
+  return button;
+}));
+document.querySelector("#collection-count").textContent = `${specimens.length} 件标本`;
 
 const state = { view: "dorsal", specimen: 0, renderToken: 0 };
 const highResCache = new Map();
@@ -119,8 +142,6 @@ const fields = {
   appearanceOne: document.querySelector("#appearance-one"),
   appearanceTwo: document.querySelector("#appearance-two"),
   collection: document.querySelector("#collection-copy"),
-  price: document.querySelector("#price-range"),
-  priceNote: document.querySelector("#price-note"),
 };
 
 function getHighResUrl(source) {
@@ -131,6 +152,11 @@ function getHighResUrl(source) {
     loader.decoding = "async";
     loader.onload = () => resolve(source);
     loader.onerror = () => {
+      if (source.startsWith("assets/catalog/")) {
+        highResCache.delete(source);
+        reject(new Error("Image unavailable"));
+        return;
+      }
       const fallback = source.replace(/\.webp$/, ".png");
       const fallbackLoader = new Image();
       fallbackLoader.onload = () => resolve(fallback);
@@ -147,6 +173,7 @@ function getHighResUrl(source) {
 function upgradeImage(side, specimen) {
   const image = images[side];
   const source = specimen.images[side];
+  if (!source) return;
   image.dataset.highResKey = source;
 
   getHighResUrl(source)
@@ -159,7 +186,8 @@ function upgradeImage(side, specimen) {
 }
 
 function setView(nextView) {
-  if (!images[nextView]) return;
+  const specimen = specimens[state.specimen];
+  if (!images[nextView] || !specimen.images[nextView]) return;
 
   upgradeImage(nextView, specimens[state.specimen]);
 
@@ -175,8 +203,8 @@ function setView(nextView) {
   });
 
   const isDorsal = nextView === "dorsal";
-  sideLabel.textContent = isDorsal ? "翅正面 · DORSAL" : "翅背面 · VENTRAL";
-  stage.setAttribute("aria-label", isDorsal ? "切换到翅背面" : "切换到翅正面");
+  sideLabel.textContent = specimen.singleLabel || (isDorsal ? "翅正面 · DORSAL" : "翅背面 · VENTRAL");
+  stage.setAttribute("aria-label", specimen.images.ventral ? (isDorsal ? "切换到翅背面" : "切换到翅正面") : `${specimen.titleText}标本影像`);
 }
 
 function renderSpecimen(index) {
@@ -187,7 +215,7 @@ function renderSpecimen(index) {
   state.renderToken = renderToken;
   state.specimen = index;
   images.dorsal.dataset.highResKey = specimen.images.dorsal;
-  images.ventral.dataset.highResKey = specimen.images.ventral;
+  images.ventral.dataset.highResKey = specimen.images.ventral || "";
   page.classList.add("is-changing");
 
   window.setTimeout(() => {
@@ -200,21 +228,26 @@ function renderSpecimen(index) {
     fields.title.innerHTML = specimen.titleHtml;
     fields.latin.innerHTML = specimen.latinHtml;
     fields.appearanceOne.textContent = specimen.appearance[0];
-    fields.appearanceTwo.textContent = specimen.appearance[1];
+    fields.appearanceTwo.textContent = specimen.appearance[1] || "";
+    fields.appearanceTwo.hidden = !specimen.appearance[1];
     fields.collection.textContent = specimen.collection;
-    fields.price.innerHTML = `<small>¥</small>${specimen.price}`;
-    fields.priceNote.textContent = specimen.priceNote;
 
     images.dorsal.src = specimen.previews.dorsal;
-    images.ventral.src = specimen.previews.ventral;
+    if (specimen.images.ventral) images.ventral.src = specimen.previews.ventral;
+    else images.ventral.removeAttribute("src");
+    images.ventral.hidden = !specimen.images.ventral;
     images.dorsal.alt = specimen.alts.dorsal;
-    images.ventral.alt = specimen.alts.ventral;
+    images.ventral.alt = specimen.alts.ventral || "";
+    document.querySelector(".view-controls").hidden = !specimen.images.ventral;
+    document.querySelector(".interaction-hint").textContent = specimen.images.ventral
+      ? "点击标本或按钮，观察另一面" : (specimen.singleLabel || "翅正面影像");
+    stage.disabled = !specimen.images.ventral;
 
     document.documentElement.style.setProperty("--acid", specimen.accents[0]);
     document.documentElement.style.setProperty("--coral", specimen.accents[1]);
     document.title = `美神蝴蝶标本工作室 · ${specimen.titleText}`;
     document.querySelector('meta[name="description"]').content =
-      `${specimen.titleText}标本档案：正反面观察、形态描述与收藏参考。`;
+      `${specimen.titleText}标本档案：${specimen.images.ventral ? "正反面观察" : "影像观察"}、形态描述与收藏参考。`;
 
     specimenButtons.forEach((button) => {
       const selected = Number(button.dataset.specimen) === index;
@@ -250,7 +283,22 @@ specimenButtons.forEach((button) => {
 });
 
 stage.addEventListener("click", () => {
+  if (!specimens[state.specimen].images.ventral) return;
   setView(state.view === "dorsal" ? "ventral" : "dorsal");
+});
+
+document.querySelector("#catalog-search").addEventListener("input", (event) => {
+  const query = event.target.value.normalize("NFKC").toLocaleLowerCase().trim();
+  let visible = 0;
+  specimenButtons.forEach((button, index) => {
+    const specimen = specimens[index];
+    const text = `${specimen.index} ${specimen.titleText} ${specimen.latinHtml.replace(/<[^>]*>/g, "")} ${(specimen.aliases || []).join(" ")}`;
+    const matches = text.normalize("NFKC").toLocaleLowerCase().includes(query);
+    button.hidden = !matches;
+    if (matches) visible++;
+  });
+  document.querySelector("#collection-count").textContent = query ? `找到 ${visible} / ${specimens.length} 件标本` : `${specimens.length} 件标本`;
+  document.querySelector("#catalog-empty").hidden = visible > 0;
 });
 
 stage.addEventListener("keydown", (event) => {
@@ -260,9 +308,12 @@ stage.addEventListener("keydown", (event) => {
 
 Object.values(images).forEach((image) => {
   image.addEventListener("error", () => {
+    const side = image === images.dorsal ? "dorsal" : "ventral";
+    const specimen = specimens[state.specimen];
+    if (!specimen.images[side]) return;
     if (image.src.endsWith("-preview.webp")) {
-      image.src = image.src.replace(/-preview\.webp$/, ".png");
-    } else if (image.src.endsWith(".webp")) {
+      image.src = specimen.images[side];
+    } else if (image.src.endsWith(".webp") && !specimen.images[side].startsWith("assets/catalog/")) {
       image.src = image.src.replace(/\.webp$/, ".png");
     }
   });

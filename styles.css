@@ -417,44 +417,6 @@ h1 {
   letter-spacing: 0.16em;
 }
 
-.price-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.35rem;
-  padding: 1rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.price-row span {
-  padding-bottom: 0.22rem;
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-
-.price-row strong {
-  color: var(--acid);
-  font-family: var(--serif);
-  font-size: 2rem;
-  font-weight: 400;
-  letter-spacing: -0.04em;
-}
-
-.price-row small {
-  margin-right: 0.12rem;
-  font: 500 0.8rem/1 var(--sans);
-}
-
-.price-note {
-  margin: 0.85rem 0 0 !important;
-  color: rgba(232, 235, 225, 0.48) !important;
-  font-family: var(--sans) !important;
-  font-size: 0.74rem !important;
-  line-height: 1.65 !important;
-}
-
 .collection-switcher {
   display: flex;
   align-items: stretch;
@@ -686,6 +648,64 @@ footer {
     gap: 0.55rem;
   }
 }
+
+[hidden] { display: none !important; }
+
+.butterfly-stage:disabled { cursor: default; }
+
+.collection-switcher { display: block; }
+
+.collection-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.catalog-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.catalog-filter input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255,255,255,0.045);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.catalog-filter input:focus-visible {
+  outline: 2px solid var(--acid);
+  outline-offset: 2px;
+}
+
+.collection-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.35rem;
+  max-height: 26rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 0.45rem 0.45rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.22) transparent;
+}
+
+.specimen-button { min-width: 0; min-height: 3.7rem; }
+.specimen-button span { overflow-wrap: anywhere; }
+.catalog-empty { padding: 1rem; color: var(--muted); font-size: 1rem; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

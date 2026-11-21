@@ -20,7 +20,7 @@
     <link rel="preload" as="image" href="assets/parides-ventral-preview.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/specimen-003-dorsal-preview.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/specimen-003-ventral-preview.webp" type="image/webp" />
-    <link rel="stylesheet" href="styles.css?v=8" />
+    <link rel="stylesheet" href="styles.css?v=9" />
   </head>
   <body>
     <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -79,7 +79,7 @@
       <aside class="specimen-card glass" aria-label="标本档案">
         <div class="card-topline">
           <span id="collection-index">COLLECTION / 001</span>
-          <span class="status"><i></i>昕语爸爸藏品档案</span>
+          <span class="status"><i></i>蝴蝶藏品档案</span>
         </div>
 
         <div class="title-group">
@@ -103,16 +103,11 @@
         <section class="collecting-note" aria-labelledby="collection-title">
           <div class="note-heading">
             <h2 id="collection-title">收藏参考</h2>
-            <span>MARKET NOTE</span>
+            <span>COLLECTION NOTE</span>
           </div>
           <p id="collection-copy">
-            在美丽彩袄蛱蝶杂交体中，这一组合兼具醒目的翅正面色彩与细节丰富的翅背面纹理，是一只收藏表现突出、性价比较高的标本。
+            这一组合兼具醒目的翅正面色彩与细节丰富的翅背面纹理，适合对照欣赏正背面的色彩与斑纹。
           </p>
-          <div class="price-row">
-            <span>品相良好参考区间</span>
-            <strong id="price-range"><small>¥</small>350–400</strong>
-          </div>
-          <p id="price-note" class="price-note">绿色形态通常价格更高；实际价值会因完整度、尺寸、展翅状态与市场供求而变化。</p>
         </section>
       </aside>
     </main>
@@ -120,8 +115,12 @@
     <nav class="collection-switcher glass" aria-label="馆藏标本选择">
       <div class="collection-label">
         <span>馆藏目录</span>
-        <small>03 件标本</small>
+        <small id="collection-count" aria-live="polite">03 件标本</small>
       </div>
+      <label class="catalog-filter" for="catalog-search">
+        <span>查找藏品</span>
+        <input id="catalog-search" type="search" placeholder="搜索中文名、拉丁名或编号" autocomplete="off" />
+      </label>
       <div class="collection-items">
         <button class="specimen-button is-current" type="button" data-specimen="0" aria-current="true">
           <small>001</small>
@@ -136,6 +135,7 @@
           <span>美丽彩袄杂交<br />水波靴蛱蝶</span>
         </button>
       </div>
+      <p id="catalog-empty" class="catalog-empty" hidden>没有找到对应藏品，请尝试其他名称。</p>
     </nav>
 
     <footer>
@@ -143,6 +143,7 @@
       <span>正反面影像档案 · 2026</span>
     </footer>
 
-    <script src="app.js?v=8"></script>
+    <script src="catalog.js?v=9"></script>
+    <script src="app.js?v=9"></script>
   </body>
 </html>
