@@ -20,7 +20,7 @@
     <link rel="preload" as="image" href="assets/parides-ventral-preview.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/specimen-003-dorsal-preview.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/specimen-003-ventral-preview.webp" type="image/webp" />
-    <link rel="stylesheet" href="styles.css?v=9" />
+    <link rel="stylesheet" href="styles.css?v=10" />
   </head>
   <body>
     <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -64,6 +64,12 @@
             alt="玫瑰彩袄蛱蝶杂交水波靴蛱蝶的翅背面：金褐与橙黄色翅面带有成列眼斑"
           />
         </button>
+
+        <div class="specimen-pager" role="group" aria-label="切换蝴蝶藏品">
+          <button class="pager-button glass" id="previous-specimen" type="button" aria-label="查看上一只蝴蝶">上一只</button>
+          <span id="pager-position" class="pager-position" aria-live="polite">001 / 119</span>
+          <button class="pager-button glass" id="next-specimen" type="button" aria-label="查看下一只蝴蝶">下一只</button>
+        </div>
 
         <div class="view-controls glass" role="group" aria-label="标本正反面选择">
           <button class="view-button is-selected" type="button" data-view="dorsal" aria-pressed="true">
@@ -144,6 +150,6 @@
     </footer>
 
     <script src="catalog.js?v=9"></script>
-    <script src="app.js?v=9"></script>
+    <script src="app.js?v=10"></script>
   </body>
 </html>

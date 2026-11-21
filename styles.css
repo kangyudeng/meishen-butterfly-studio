@@ -233,6 +233,35 @@ footer {
   transform: translate(-50%, -51%) rotateX(1deg) scale(1.015);
 }
 
+.specimen-pager {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 4.5rem;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.pager-button {
+  min-width: 4.5rem;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  color: var(--ink);
+  font: 500 0.875rem/1.2 var(--sans);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.pager-button:hover { border-color: var(--acid); }
+.pager-button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+.pager-position { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.08em; }
+
 .view-controls {
   position: absolute;
   bottom: 0;

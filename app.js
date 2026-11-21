@@ -118,6 +118,7 @@ directory.replaceChildren(...specimens.map((specimen, index) => {
   return button;
 }));
 document.querySelector("#collection-count").textContent = `${specimens.length} 件标本`;
+document.querySelector("#pager-position").textContent = `${specimens[0].index} / ${specimens.length}`;
 
 const state = { view: "dorsal", specimen: 0, renderToken: 0 };
 const highResCache = new Map();
@@ -222,6 +223,7 @@ function renderSpecimen(index) {
     if (state.renderToken !== renderToken || state.specimen !== index) return;
 
     fields.headerIndex.textContent = specimen.index;
+    document.querySelector("#pager-position").textContent = `${specimen.index} / ${specimens.length}`;
     fields.collectionIndex.textContent = `COLLECTION / ${specimen.index}`;
     fields.type.textContent = specimen.type;
     fields.kicker.textContent = specimen.kicker;
@@ -266,6 +268,13 @@ function renderSpecimen(index) {
     }, 900);
   }, 140);
 }
+
+function stepSpecimen(direction) {
+  renderSpecimen((state.specimen + direction + specimens.length) % specimens.length);
+}
+
+document.querySelector("#previous-specimen").addEventListener("click", () => stepSpecimen(-1));
+document.querySelector("#next-specimen").addEventListener("click", () => stepSpecimen(1));
 
 viewButtons.forEach((button) => {
   button.addEventListener("click", () => setView(button.dataset.view));
