@@ -245,6 +245,8 @@ function renderSpecimen(index) {
       ? "点击标本或按钮，观察另一面" : (specimen.singleLabel || "翅正面影像");
     stage.disabled = !specimen.images.ventral;
 
+    document.documentElement.style.setProperty("--acid", specimen.accents[0]);
+    document.documentElement.style.setProperty("--coral", specimen.accents[1]);
     document.title = `美神蝴蝶标本工作室 · ${specimen.titleText}`;
     document.querySelector('meta[name="description"]').content =
       `${specimen.titleText}标本档案：${specimen.images.ventral ? "正反面观察" : "影像观察"}、形态描述与收藏参考。`;
